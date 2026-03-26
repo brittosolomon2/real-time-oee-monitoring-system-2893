@@ -32,6 +32,28 @@ export function getApiBaseUrl(): string {
   return "http://localhost:3001";
 }
 
+/**
+ * Resolve access token only on the client. This avoids reading localStorage on the server.
+ */
+function getTokenForRequest(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem("oee.access_token");
+  } catch {
+    return null;
+  }
+}
+
+function clearTokenOnUnauthorized(status: number): void {
+  if (typeof window === "undefined") return;
+  if (status !== 401) return;
+  try {
+    window.localStorage.removeItem("oee.access_token");
+  } catch {
+    // ignore
+  }
+}
+
 async function parseMaybeJson(res: Response): Promise<unknown> {
   const contentType = res.headers.get("content-type") || "";
   if (contentType.includes("application/json")) return res.json();
@@ -46,11 +68,14 @@ async function request<T>(
   const baseUrl = init?.baseUrl ?? getApiBaseUrl();
   const url = joinUrl(baseUrl, path);
 
+  const token = getTokenForRequest();
+
   const res = await fetch(url, {
     ...init,
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(init?.headers || {}),
     },
     // Avoid Next.js caching for live-ish operational data.
@@ -58,6 +83,8 @@ async function request<T>(
   });
 
   if (!res.ok) {
+    clearTokenOnUnauthorized(res.status);
+
     const payload = await parseMaybeJson(res);
     const message =
       (payload as ApiErrorEnvelope | null)?.message ||

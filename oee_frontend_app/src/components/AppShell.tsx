@@ -5,12 +5,14 @@ import { usePathname } from "next/navigation";
 import React from "react";
 
 const navItems: Array<{ href: string; label: string; description: string }> = [
-  { href: "/", label: "Dashboard", description: "Live OEE overview" },
+  { href: "/", label: "Landing", description: "Product overview" },
+  { href: "/auth", label: "Auth", description: "Login and user creation" },
   { href: "/reference", label: "Reference", description: "Lines and shifts" },
   { href: "/runs", label: "Runs", description: "Create & manage production runs" },
   { href: "/events", label: "Events", description: "Log downtime and quality" },
   { href: "/oee", label: "OEE", description: "OEE breakdown for a run" },
   { href: "/settings", label: "Settings", description: "API configuration help" },
+  { href: "/docs", label: "Docs", description: "Backend swagger link" }
 ];
 
 function NavLink({ href, label }: { href: string; label: string }) {
