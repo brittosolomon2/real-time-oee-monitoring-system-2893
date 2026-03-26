@@ -1,10 +1,13 @@
 @import "tailwindcss";
 
+/* Ocean Professional theme tokens */
 :root {
-  --color-primary: #000000;
-  --color-secondary: #FFFFFF;
-  --color-accent: #3B82F6;
-  --color-background: #FFFFFF;
+  --op-primary: #2563eb; /* blue-600 */
+  --op-secondary: #f59e0b; /* amber-500 */
+  --op-error: #ef4444; /* red-500 */
+  --op-bg: #f9fafb; /* gray-50 */
+  --op-surface: #ffffff;
+  --op-text: #111827; /* gray-900 */
 }
 
 * {
@@ -17,10 +20,45 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  background-color: var(--color-background);
-  color: var(--color-primary);
+  background: var(--op-bg);
+  color: var(--op-text);
 }
 
 body {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Shared UI helpers */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.btn-secondary {
+  @apply bg-white text-slate-900 ring-1 ring-slate-200 hover:bg-slate-50;
+}
+
+.input {
+  @apply h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900 shadow-sm;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.label {
+  @apply text-xs font-semibold text-slate-700;
+}
+
+.card {
+  @apply rounded-2xl border border-slate-200 bg-white shadow-sm;
+}
+
+.card-header {
+  @apply border-b border-slate-200 px-6 py-4;
+}
+
+.card-body {
+  @apply px-6 py-5;
 }
